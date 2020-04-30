@@ -1,0 +1,8 @@
+--select convert(int,GETDATE()-dtarih)/365 as yas from ogrenci where year(dtarih)>1989
+--select * from ogrenci where year(dtarih)>1989
+--select * from ogrenci where year(dtarih)>1989 or year(dtarih)<1989
+--select * from kitap where turno=3 order by sayfasayisi desc
+--select * from kitap where puan>20 or sayfasayisi>300
+--select * from kitap where yazarno=22 or yazarno=23
+--select * from kitap where sayfasayisi>50 and sayfasayisi<100
+--select * from kitap where kitapadi like '____'
