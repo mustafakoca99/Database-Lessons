@@ -1,0 +1,55 @@
+1-)select*from adres
+1-)select*from fatura	
+1-)select*from faturaDetay
+1-)select*from ilce
+1-)select*from kullanici
+1-)select*from sehir
+1-)select*from sepet
+1-)select*from siparis
+1-)select*from siparisDetay
+1-)select*from sipDurum
+1-)select*from urun
+1-)select*from urunAltKateg
+1-)select*from urunKateg
+2-)select adSoyad,cinsiyet,dogumTarihi from kullanici 
+3-)select*from urun where fiyat>200
+4-)select*from kullanici where adSoyad like 'Ahmet%'
+5-)select*from urun where urunAdi like '%Pirinç%'
+6-)select*from urun where altkategorino='13'and  fiyat>30
+7-)select*from urun where altkategorino='24' or altkategorino ='25'
+8-)select distinct urunNo from   siparisDetay 
+9-)select*from kullanici where dogumTarihi like '%1999%' and cinsiyet like '%E%'
+10-)select*from siparis order by toplamTutar desc
+11-)select*from urun order by fiyat desc
+12-)select*,urunAdi as 'Ürün Adý', fiyat as 'Ürün Fiyatý' from urun
+13-)select AVG(toplamTutar) as 'ORTALAMA' from siparis
+14-)select*,(fiyat*18/100)+fiyat as 'kdvdahilfiyati' from urun
+17-)select*from kullanici where tel1 like '%505%' or tel2 like '%505%'
+18-)select*from kullanici where dogumTarihi like '%04-01%'
+19-)select*,datediff(year,dogumTarihi,getdate()) as 'Yaþ Alaný' from kullanici 
+20-)select*,datediff(year,dogumTarihi,getdate()) as 'Yaþ Alaný' from kullanici where datediff(year,dogumTarihi,getdate()) =36
+21-)select*from urun  where altkategorino like '%48%' order by fiyat asc
+22-)select*from urun where urunAdi like '_______'
+23-)select*,len(adSoyad) as 'UZUNLUK' from kullanici order by len(adSoyad) desc
+24-)select*,round(cast (altkategorino as float)/fiyat,2)as'ort' from urun where altkategorino like '%10%'
+25-)select max(toplamTutar) as 'en yuksek tutar' from siparis
+26-)select*from kullanici where dogumTarihi=(select min(dogumTarihi) from kullanici)
+27-)select*from siparis where sipTarih<'2020.03.31' and sipTarih>'2020.03.01'
+28-)select count(urunNo) AS 'kac adet'from urun
+29-)select count(kullaniciNo) as 'kac kullanici'from kullanici
+30-)select count(distinct miktar) from siparisDetay
+31-)select trim(cast(datepart(hour,GETDATE()) as char))+':'+cast(datepart(MINUTE,GETDATE()) as char)as 'sistem saati'
+32-)select altkategorino,count(urunNo) as 'alt kategoride ki ürün sayýsý' from urun group by altkategorino
+33-)select altkategorino,count(urunNo) as 'alt kategoride ki ürün sayýsý' from urun group by altkategorino order by [alt kategoride ki ürün sayýsý] desc
+34-)select altkategorino,count(urunNo) as 'Urun Sayýsý' from urun group by altkategorino having count(urunNo) >=1000
+35-)select getdate()
+36-)select*,round(cast (altkategorino as float)/fiyat,2)as'ort' from urun
+37-)select*from sepet where sepetNo='48'
+39-)select urunNo,miktar from sepet order by urunNo desc 
+39-)select urunNo,miktar from sepet order by miktar desc 
+40-)select urunKod ,miktar from siparisDetay inner join urun on siparisDetay.urunNo=urun.urunNo where miktar= (select max(miktar)from siparisDetay)
+41-)select urunKod ,tutar from siparisDetay inner join urun on siparisDetay.urunNo=urun.urunNo where tutar= (select max(tutar)from siparisDetay)
+4-)4select sehirNo, count(ilceNo)  as 'ilce_sayisi' from ilce group by sehirNo
+45-)select sehirNo,count(ilceNo) as 'ilce_sayisi' from ilce group by sehirNo order by [ilce_sayisi] desc 
+46-)select sehirNo,count(ilceNo) as 'ilce_Sayisi' from ilce group by sehirNo having count(ilceNo) >=20
+50-)select*from urun where urunAdi like '%kg%' or urunAdi like '%g%'
