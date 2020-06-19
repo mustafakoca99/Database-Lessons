@@ -1,0 +1,73 @@
+﻿--51)ilce tablosounda ilceno, ilçe adı ve şehir adı birlikte gösteriniz
+select ilceNo,ilceAdi,sehirAdi from ilce left join sehir on ilce.sehirNo=sehir.sehirNo
+
+--52)siparisdetay tablosunda bulunan ürünlerin adları ile birlikte satış miktarlarını gösteriniz
+select  urunAdi ,miktar from siparisDetay inner join urun on siparisDetay.urunNo=urun.urunNo
+
+--53)urun tablosunda bulunan ürünlerin bilgileri ile birlikte alt kategori isimlerini görüntüleyiniz
+select urunNo,urunKod,urunAdi,fiyat,altkategoriadi from urun left join urunAltKateg on urun.altkategorino=urunAltKateg.altkategorino
+
+--54)urun tablosunda bulunan ürünlerin bilgileri ile birlikte alt kategori ve kategori isimlerini görüntüleyiniz
+select urunNo,urunKod,urunAdi,fiyat,kategorino,altkategoriadi from urun left join urunAltKateg on urun.altkategorino=urunAltKateg.altkategorino
+
+--55)urun tablosunda bulunan ürünlerin bilgileri ile birlikte kategori isimlerini görüntüleyiniz
+select urunNo,urunKod,urunAdi,fiyat,altkategoriadi from urun right join urunAltKateg on urun.altkategorino=urunAltKateg.altkategorino
+
+--56)sepetlere eklenen ürünlerin adlarını ve kaç kez eklendiklerini gösteriniz (alınan miktar değil ürünün kaç kez sepete atıldığı)
+
+select urunAdi,count(miktar) as "Eklenen Adet Sayısı" from sepet inner join urun on sepet.urunNo=urun.urunNo group by urunAdi
+
+--57)sepetlere en çok hangi ürünün eklendiğini adı, numarası ve eklenme sayısı ile gösteriniz
+select urunKod,urunAdi,miktar from sepet inner join urun on urun.urunNo=sepet.urunNo where miktar= (select MAX (miktar)from sepet)
+
+--58)en yüksek sipariş tutarını veren kişinin adı soyadı ve sipariş tutarını gösteriniz
+select adSoyad,toplamTutar from siparis inner join kullanici on siparis.kullaniciNo=kullanici.kullaniciNo where toplamTutar=(select MAX(toplamTutar)from siparis)
+
+--59)850 nolu kullanıcı sepetini tıkladı ve karşısında ürün adlarını,miktarlarını,fiyatlarını ve tutarlarını (miktar*fiyat) görmeli
+select  kullaniciNo ,urunAdi,miktar,fiyat,(miktar*fiyat) as 'miktar*fiyat' from  urun inner join sepet on urun.urunNo=sepet.urunNo  where kullaniciNo='850'
+
+--60)kullanici tablosuna kendinizi ekleyiniz.
+select*from kullanici
+insert into kullanici values('mkoca',25123,'mustafakoca','mustafakoca220@gmail.com','E',GETDATE(),NULL,'(541)6514214',NULL)
+
+--61)kullanici tablosundan kendinize ait kullanicino bilgisini adsoyad bilgisinden bularak gösteriniz. kullanicino bilgisini not ediniz.
+select*from kullanici where kullaniciAdi='mkoca'
+
+--62)adres tablosuna kendiniz için bir adres ekleyiniz adres adı 'Ev1' olsun, ilce no ilce tablsoundan bulunuz.
+insert into  adres values('10002','EV1','58',82971,'çeştepe mah. 38 sok. no=10')
+select*from ilce where ilceNo='58'
+
+--63)kendiniz için eklediğiniz adres bilgilerini görüntüleyiniz. adres numarasını not ediniz.
+select*from adres where adresNo='0' --adresNo=0
+insert into sepet values(10002,380,5)
+insert into sepet values(10002,4946,4)
+insert into sepet values(10002,48,10)
+
+--65)sepete kendiniz için eklediğiniz ürünlerin toplam tutarını görüntüleyiniz
+select  kullaniciNo,sepetNo,urunAdi, miktar,fiyat,(miktar*fiyat) as 'toplam tutar' from urun inner join sepet on urun.urunNo=sepet.urunNo where kullaniciNo='0'
+
+--66)sepete kendiniz için eklediğiniz ürünleri satın alacaksınız. öncelikle siparis tablsounda yeni bir siparis açınız. henüz toplam tutar=0. sipdurum 1 (siparis alındı).
+insert into siparis values(0,64,GETDATE(),'1','ademkoca','mustafakoca',64,0,1)
+
+--67) siparis tablosunda kendiniz için oluşturduğunuz yeni siparişin sipno'sunu gösteriniz ve not ediniz
+select * from siparis where faturaAdSoyad='mustafakoca' --sipNo=1
+
+--68)siparis tablosuna eklediğiniz yeni kayıt için siparisdetay tablosuna siparişinizin detaylarını gireceksiniz.
+--sepet tablosundaki ürünlerinizi siparisdetay tablosuna aktarıp sepetten silmelisiniz.Eklenecek ürünün fiyatı urun tablosundan alınmalıdır 
+insert into siparisDetay values(1,380,5,17.5,0)
+insert into siparisDetay values(1,48,10,21,0)
+insert into siparisDetay values(1,4649,4,75.6,0)
+--silmek için;
+delete from sepet where kullaniciNo='10002'
+
+--69)siparis tablosunda kendiniz için eklediğiniz kayıtta toplam tutar bilgisini siparisdetay tablosundan tutarları toplayıp güncelleyiniz
+update siparis set toplamTutar=114.1 where toplamTutar=0
+
+--70)kendiniz için yaptığınız sipairiş onaylandı ve kargolanacak faturasını kesiniz. Bunun için ilgili sipariş ve detayını fatura ve fatura detaya aktarmalısınız
+--önce fatura tablosuna yeni bir kayıt ekleyiniz faturano ve kargonumarası son kayıttan 1 fazlası olarak kullanılabilir
+--fatura tarihi şu andaki tarih olmalı toplam tutar siparis tablosundan alınmalıdır
+insert into fatura values(1,'25052020-163018',GETDATE(),'CRG25052020-163815',1,114.1)
+
+--71)faturadetay tablosuna ilgili kayıtları siparisdetay tablosundan ekleyiniz. Faturasirano bilgisini fatura tablosundan alınız.
+--faturası kesilen sipariş detayının durumu 0 olarak değiştirilmelidir
+update siparis set sipDurum=0 where kullaniciNo=0
